@@ -8,6 +8,17 @@ body{
   align-items:center;
 }
 
+.main-content {
+    position: absolute;
+    display: flex;
+    top: 64px; 
+    bottom: 64px;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    height: 100vh-128px;
+}
+
 .navbar{
     position: fixed;
     top: 0;
@@ -15,6 +26,7 @@ body{
 
     width: 100%;
     height: 64px;
+    flex: 1; 
 
     display: flex;
     justify-content: flex-start;
@@ -28,12 +40,11 @@ body{
 }
 
 .sidebar {
-    position: fixed;
-    top: 64px;
+    position: relative;
     left: 0;
 
-    width: 400px;
-    height: calc(100vh - 128px);
+    width: 30%;
+    height: 100%;
 
     display: flex;
     flex-direction: column;
@@ -48,12 +59,18 @@ body{
 }
 
 .log {
+    position: relative;
+    overflow: auto;
     display: flex;
     flex-wrap: wrap;
+    width: 60%;
+    flex: 1;
     justify-content: center;
+
     background-color: #ffffff;
     border-radius: 1em;
     padding: 2em;
+    margin: 0 2em;
     gap: 1em;                
 }   
 #bottom-content {
