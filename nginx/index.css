@@ -1,7 +1,7 @@
 body{
   margin:0;
   font-family:Arial, sans-serif;
-  background:linear-gradient(135deg,#f0d60d,#a64d09);
+  background:linear-gradient(135deg,#A6B1E1,#DCD6F7);
   height:100vh;
   display:flex;
   justify-content:center;
@@ -23,7 +23,7 @@ body{
     padding: 0 2rem;
     gap: 3rem;
     z-index: 1000;
-    background: #ffffff;
+    background: #4E4C67;
     color: #000000;
 }
 
@@ -43,9 +43,19 @@ body{
     padding: 0 2rem;
     gap: 3rem;
     z-index: 1000;
-    background: #df760e;
+    background: #985F6F;
     color: #000000;
 }
+
+.log {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    background-color: #985F6F;
+    border-radius: 1em;
+    padding: 2em;
+    gap: 1em;                
+}   
 #bottom-content {
     position: fixed;
     bottom: 0;
@@ -61,7 +71,7 @@ body{
     padding: 0 2rem;
     gap: 3rem;
     z-index: 1000;
-    background: #ffffff;
+    background: #4E4C67;
     color: #000000;
 
 }
