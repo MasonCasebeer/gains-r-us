@@ -1,0 +1,28 @@
+body{
+  margin:0;
+  font-family:Arial, sans-serif;
+  background:linear-gradient(135deg,#f0d60d,#a64d09);
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+.navbar{
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 64px;
+
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+
+    padding: 0 2rem;
+    gap: 3rem;
+    z-index: 1000;
+    background: #111;
+    color: white;
+}
