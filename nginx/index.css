@@ -16,7 +16,7 @@ body{
     justify-content: flex-start;
     align-items: center;
     width: 100%;
-    height: 100vh-128px;
+    height: calc(100vh - 128px); 
 }
 
 .navbar {
@@ -51,7 +51,6 @@ body{
     justify-content: center;
     align-items: center;
 
-    padding: 0 2rem;
     gap: 3rem;
     z-index: 1000;
     background: #e1af18;
@@ -63,14 +62,13 @@ body{
     overflow: auto;
     display: flex;
     flex-wrap: wrap;
-    width: 60%;
-    flex: 1;
-    justify-content: center;
+    flex:  .25;
+    width: calc(100% - 6em);
 
     background-color: #ffffff;
     border-radius: 1em;
     padding: 2em;
-    margin: 0 2em;
+    margin: 0 3em;
     gap: 1em;                
 }   
 
@@ -79,6 +77,26 @@ body{
     gap: 2rem;
 }
 
+.daily {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    
+    width: 70%;
+    height: 100%;
+    gap: 1em;
+}
+
+.body {
+  width: 100px;
+  height: 100px;
+  background-color: rgb(110, 135, 203); /* Or use hex #0000FF */
+  border-radius: 50%;
+  display: inline-block;
+
+}
 #bottom-content {
     position: fixed;
     bottom: 0;
