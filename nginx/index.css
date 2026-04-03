@@ -19,7 +19,7 @@ body{
     height: 100vh-128px;
 }
 
-.navbar{
+.navbar {
     position: fixed;
     top: 0;
     left: 0;
@@ -73,6 +73,12 @@ body{
     margin: 0 2em;
     gap: 1em;                
 }   
+
+.nav-links {
+    display: flex;
+    gap: 2rem;
+}
+
 #bottom-content {
     position: fixed;
     bottom: 0;

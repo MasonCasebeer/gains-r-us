@@ -55,9 +55,9 @@ const log = () => {
             const sets = document.createElement("input");
             const reps = document.createElement("input");
             const weight = document.createElement("input");
-            sets.setAttribute('id', workout + '-sets');
-            reps.setAttribute('id', workout + '-reps');
-            weight.setAttribute('id', workout + '-weight');
+            sets.setAttribute('name', workout + '-sets');
+            reps.setAttribute('name', workout + '-reps');
+            weight.setAttribute('name', workout + '-weight');
 
             label.innerHTML = workout.exercises[j] + ": ";
             form.appendChild(label);
@@ -70,6 +70,13 @@ const log = () => {
             form.appendChild(document.createElement("br"));
         }
     });
+
+    submit.addEventListener("click", (event) => {
+        event.preventDefault();
+        //normally this would submit the form to the backend database, but since we don't have a backend yet, it just clears the form
+        form.replaceChildren();
+    });
+
     component.appendChild(selector);
     component.appendChild(form);
     component.appendChild(submit);
