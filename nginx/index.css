@@ -89,13 +89,16 @@ body{
     gap: 1em;
 }
 
-.body {
-  width: 100px;
-  height: 100px;
-  background-color: rgb(110, 135, 203); /* Or use hex #0000FF */
-  border-radius: 50%;
-  display: inline-block;
-
+.body-part {
+    width: 100px;
+    height: 100px;
+    background-color: rgb(110, 135, 203); /* Or use hex #0000FF */
+    border-radius: 50%;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-weight: bold;
 }
 #bottom-content {
     position: fixed;

@@ -1,4 +1,6 @@
-const workout1 = {
+//Author: Mason Casebeer
+
+const routine1 = {
     name: 'Push Day',
     exercises: [
         "Bench",
@@ -7,7 +9,7 @@ const workout1 = {
     ]
 }
 
-const workout2 = {
+const routine2 = {
     name: 'Pull Day',
     exercises: [
         "Row",
@@ -16,9 +18,9 @@ const workout2 = {
     ]
 }
 
-const workouts = [workout1,workout2]
+const routines = [routine1,routine2]
 
-arrayLength = workouts.length;
+arrayLength = routines.length;
 
 const component = document.querySelector(".log");
 
@@ -35,15 +37,15 @@ const log = () => {
     for (let i = 0; i < arrayLength; i++) {
         const workout = document.createElement("option");
         workout.value = i;
-        workout.innerHTML = workouts[i].name;
+        workout.innerHTML = routines[i].name;
         selector.appendChild(workout);
     }
 
     selector.addEventListener("change", (event) => {
         form.replaceChildren();
         const index = event.target.value;
-        const workout = workouts[event.target.value];
-        for (let j = 0; j < workouts[index].exercises.length; j++) {
+        const workout = routines[event.target.value];
+        for (let j = 0; j < routines[index].exercises.length; j++) {
             const label = document.createElement("label");
             label.for = workout;
             const setlabel = document.createElement("label");
