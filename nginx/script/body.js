@@ -57,7 +57,7 @@ const body = () => {
         //soreness = percent of weight limit for muscle group
         const muscleSoreness = Math.min(soreness / muscleLimits[muscleGroup], 1) * 100; 
         muscleGroupElement.setAttribute("class", "body-part");
-        //opacity based on soreness
+        //opacity based on soreness. min of 20% if no soreness and 100% if max or above limit
         muscleGroupElement.style.backgroundColor = `rgba(110, 135, 203, ${.2+ (muscleSoreness / 80) })`; 
 
         muscleGroupElement.innerHTML = `${muscleGroup}: ${muscleSoreness.toFixed(2)}% sore`;

@@ -90,16 +90,18 @@ body{
 }
 
 .body-part {
-    width: 100px;
-    height: 100px;
+    width: 200px;
+    height: 200px;
     background-color: rgb(110, 135, 203); /* Or use hex #0000FF */
     border-radius: 50%;
+    margin: 1em;
     display: inline-flex;
     justify-content: center;
     align-items: center;
     color: white;
     font-weight: bold;
 }
+
 #bottom-content {
     position: fixed;
     bottom: 0;
