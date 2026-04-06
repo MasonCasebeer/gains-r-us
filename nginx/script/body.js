@@ -12,8 +12,8 @@ const exercise1 = {
 };
 const set1 = {
     workout: 1,
-    sets: 3,
-    reps: 10,
+    sets: 6,
+    reps: 15,
     weight: 135,
     exercise_id: 1
 };
