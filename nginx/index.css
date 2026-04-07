@@ -315,19 +315,13 @@ header .calendar-current-date {
     border-radius: 10px;
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
 
-    position: fixed;
-    left: 40px;
-    top: 63%;
-    transform: translateY(-30%);
+    position: relative;
     z-index: 9999;
 
     color: white
 }
 #loginTrigger {
     cursor: pointer;
-    color: white;
+    color: blue;
     text-decoration: underline;
-    background-color: #d14f0a;
-    border-radius: 10%;
-    padding: 0.5em 0.5em;
 }
