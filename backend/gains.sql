@@ -23,6 +23,7 @@ CREATE TABLE "routine" (
 DROP TABLE IF EXISTS "workout";
 CREATE TABLE "workout" (
 	"name" character varying(15),
+	"date" character varying(12),
 	"workoutid" smallint NOT NULL PRIMARY KEY,
     "routineid" smallint NOT NULL,
     "userid" smallint NOT NULL,
