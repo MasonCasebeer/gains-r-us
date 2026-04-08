@@ -6,5 +6,7 @@ proper commands to fix
 
 Wheeler: Used an existing project https://www.geeksforgeeks.org/javascript/how-to-design-a-simple-calendar-using-javascript/ to implement the calendar portion
 
+Witte: Used https://www.w3schools.com/howto/howto_css_login_form.asp to learn how to make a login page and what a modal login is.
+
 sudo nginx -s stop
 sudo nginx
