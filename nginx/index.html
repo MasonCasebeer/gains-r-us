@@ -13,8 +13,7 @@
         <H1> Gains R Us </H1>
         <ul class="nav-links">
             <a href="/index.html"> Home </a>
-            <a class = "login" id="loginTrigger"> Login </a>
-            <!-- <a href="/about.html"> About </a> -->
+            <div id="user-status">Checking login status...</div>
         </ul>
     </nav>
 
@@ -65,6 +64,7 @@
     </div>
 
     <script src="script/calendar.js"></script>
+    <script defer src="script/loginStatus.js"></script>
 
     <div id="loginModal" class="modal">
         <div class="modal-content">
@@ -75,12 +75,11 @@
                 <input type="text" id="username" name="username" required>
                 <br><br>
                 <label for="password">Password:</label>
-                <input type="text" id="password" name="password" required>
+                <input type="password" id="password" name="password" required>
                 <br><br>
                 <button type="submit">Login</button>
             </form>
         </div>
     </div>
-    <script src="script/login.js"></script>
 </body>
 </html>

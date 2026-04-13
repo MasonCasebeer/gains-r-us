@@ -9,7 +9,7 @@ services:
     networks:
       - mynetwork
     volumes:
-      - ./nginx/html:/usr/share/nginx/html
+      - ./nginx:/usr/share/nginx/html
       - ./nginx.conf:/etc/nginx/nginx.conf
 
   backend:
