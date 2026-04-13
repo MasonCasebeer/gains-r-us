@@ -1,5 +1,4 @@
-//file: loginSatus.js -- used on frontpage.html (can be used elsewhere)
-//
+//file: loginSatus.js -- used on index
 // script should be included and DEFERed on all pages requiring user to be logged-in for access
 // requires an element named userStatus - replaces the text with either login or logout links
 
@@ -47,6 +46,7 @@ if (form) {
 
         if (response.ok) {
             alert("Login Successful");
+            window.location.href = "index.html";
             modal.style.display = "none";
         } else {
             alert("Login failed. Check username/password.");
@@ -75,4 +75,4 @@ async function checkLoginStatus() {
     }
 }
 
-window.onload = checkLoginStatus;
+checkLoginStatus();

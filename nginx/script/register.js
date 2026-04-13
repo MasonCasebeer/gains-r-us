@@ -4,17 +4,6 @@
 // -- backend creates salt and hashed passowrd
 // -- then tries to insert into database
 
-// "name" character varying(15),
-// "surname" character varying(15),
-// "username" character varying(15) UNIQUE,
-// email VARCHAR(255) UNIQUE NOT NULL,
-// hash CHAR(128) NOT NULL,
-// salt CHAR(32) NOT NULL,
-// role VARCHAR(10) CHECK (role IN ('user', 'admin')) NOT NULL DEFAULT 'user'
-// "age" smallint,
-// "weight" smallint,
-// "gender" char,
-// "userid" smallint NOT NULL PRIMARY KEY
 async function register(event) {
     console.log("here we are in register.js");
     event.preventDefault(); // Prevent default form submission
