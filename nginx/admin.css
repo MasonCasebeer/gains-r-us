@@ -1,0 +1,10 @@
+#control-panel {
+    position: absolute;
+}
+#dashboard-controls {
+    position: relative;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
