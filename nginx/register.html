@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
     <script defer src="script/register.js"> </script>
-    <!-- <script defer src="script/loadnavbar.js"> </script> -->
     <script defer src="script/loginStatus.js"> </script>
     <link rel="stylesheet" href="index.css">
 </head>
@@ -18,7 +17,7 @@
             </ul>
         </nav>
 
-      <form id="register-form">
+      <form id="register-form" onsubmit="register(event)">
       <fieldset>
       <legend>R Form</legend>
         <label for="name">Name:</label>

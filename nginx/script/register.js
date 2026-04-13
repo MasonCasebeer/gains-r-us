@@ -4,6 +4,17 @@
 // -- backend creates salt and hashed passowrd
 // -- then tries to insert into database
 
+// "name" character varying(15),
+// "surname" character varying(15),
+// "username" character varying(15) UNIQUE,
+// email VARCHAR(255) UNIQUE NOT NULL,
+// hash CHAR(128) NOT NULL,
+// salt CHAR(32) NOT NULL,
+// role VARCHAR(10) CHECK (role IN ('user', 'admin')) NOT NULL DEFAULT 'user'
+// "age" smallint,
+// "weight" smallint,
+// "gender" char,
+// "userid" smallint NOT NULL PRIMARY KEY
 async function register(event) {
     console.log("here we are in register.js");
     event.preventDefault(); // Prevent default form submission
@@ -11,10 +22,15 @@ async function register(event) {
     const formData = new FormData(document.getElementById("register-form"));
 
     const userData = {
+        name: 'default',
+        surname: 'default',
         username: formData.get("username"),
         email: formData.get("email"),
         password: formData.get("password"),
-        role: formData.get("role")
+        role: formData.get("role"),
+        age: 0,
+        weight: 0,
+        gender: 'X',
     };
 
     const jsonBody = JSON.stringify(userData);
@@ -34,7 +50,7 @@ async function register(event) {
             console.log(result);
             if(result.success == true){
                alert(`${result.message} for ${result.username}`);
-               window.location.href = "frontpage.html";
+               window.location.href = "index.html";
             } else {
                alert(`${result.message}`);
             }

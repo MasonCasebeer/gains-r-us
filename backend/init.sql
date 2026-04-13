@@ -9,11 +9,11 @@ CREATE TABLE IF NOT EXISTS "users" (
     email VARCHAR(255) UNIQUE NOT NULL,
     hash CHAR(128) NOT NULL,
     salt CHAR(32) NOT NULL,
-    role VARCHAR(10) CHECK (role IN ('user', 'admin')) NOT NULL DEFAULT 'user'
+    role VARCHAR(10) CHECK (role IN ('user', 'admin')) NOT NULL DEFAULT 'user',
     "age" smallint,
     "weight" smallint,
     "gender" char,
-	"userid" smallint NOT NULL PRIMARY KEY
+	"userid" serial NOT NULL PRIMARY KEY
 );
 
 select * from "users";

@@ -39,7 +39,7 @@ if (form) {
     const password = document.getElementById("password").value;
 
     try {
-        const response = await fetch("/login", {
+        const response = await fetch("/api/login", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({username, password})
@@ -65,9 +65,9 @@ async function checkLoginStatus() {
         const userStatus = document.getElementById("user-status");
 
         if (data.loggedIn) {
-            userStatus.innerHTML = `Logged in as: <strong>${data.user.username}</strong> (<a href="/logout.html">Logout</a>)`;
+            userStatus.innerHTML = 'Logged in as: <strong>' + data.user.username + '</strong> (<a href="/logout.html">Logout</a>)';
         } else {
-            userStatus.innerHTML = `<a class="login" id="loginTrigger"> Login </a> | <a href="/register.html">Register</a>`;
+            userStatus.innerHTML = '<a class="login" id="loginTrigger"> Login </a> | <a href="/register.html">Register</a>';
             setupLoginTrigger();
         }
     } catch (error) {

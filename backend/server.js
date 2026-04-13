@@ -53,7 +53,7 @@ app.post("/api/register", async (req, res) => {
   const salt = crypto.randomBytes(16).toString("hex");
   const hash = crypto.pbkdf2Sync(password, salt, 1000, 64, "sha512").toString("hex");
 
-  const query = 'INSERT INTO users (username, email, hash, salt, role) VALUES ($1, $2, $3, $4, $5) RETURNING id';
+  const query = 'INSERT INTO users (username, email, hash, salt, role) VALUES ($1, $2, $3, $4, $5) RETURNING userid';
 
   const values = [username, email, hash, salt, role];
   console.log("trying query with these values...");

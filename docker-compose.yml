@@ -34,7 +34,7 @@ services:
       - .env  # load same environment variables
     volumes:
       - pgdata2:/var/lib/postgresql
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./backend/init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - mynetwork
 
