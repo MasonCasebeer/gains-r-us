@@ -97,7 +97,7 @@ app.get("/api/session", (req, res) => {
 app.get("/api/user-workouts", async (req, res) => {
   const result = await pool.query(
     `
-    SELECT DISTINCT username, email, role, users.userid FROM users
+    SELECT DISTINCT username, email, role, users.userid, workoutid, routineid FROM users
     LEFT JOIN workout ON users.userid = workout.userid
     `
   );
@@ -126,8 +126,15 @@ app.get("/api/routines", async (req, res) => {
 });
 
 app.post("/api/log-workout", async (req, res) => {
-  const { workoutData } = req.body.workoutData;
-  console.log("Received workout data:", workoutData);
+
+  console.log("Received workout log request with body:", req.body);
+  const workoutData = req.body.info.workoutData;
+
+  if(!workoutData) {
+    console.error("Missing workoutData in request body");
+    return res.status(400).json({ success: false, message: "Missing workoutData or setsData" });
+  }
+
   try {
     const result = await pool.query(
       `
@@ -148,6 +155,39 @@ app.post("/api/log-workout", async (req, res) => {
   }
 
 });
+
+app.post("/api/log-set", async (req, res) => {
+
+  console.log("Received set log request with body:", req.body);
+  const setInfo = req.body.setInfo;
+
+  if(!setInfo) {
+    console.error("Missing setInfo in request body");
+    return res.status(400).json({ success: false, message: "Missing setInfo" });
+  }
+
+  try {
+    const result = await pool.query(
+      `
+      INSERT INTO sets (workoutid, exerciseid, sets, reps, weight)
+      VALUES ($1, $2, $3, $4, $5)
+      RETURNING set_id
+      `,
+      [setInfo.workoutid, setInfo.exerciseid, setInfo.sets, setInfo.reps, setInfo.weight]
+    );
+    
+    console.log(`Inserted set with ID: ${result.rows[0].setid}`);
+    res.json({ success: true, setId: result.rows[0].setid });
+  } 
+  
+  catch (error) {
+    console.error("Error logging set:", error);
+    res.json({ success: false, message: "Error logging set" });
+  }
+
+});
+
+
 
 //added these so backend doesnt crash just cause call failed
 process.on('unhandledRejection', (reason, promise) => {

@@ -52,9 +52,10 @@ CREATE TABLE "routine_exercise" (
 
 );
 
-DROP TABLE IF EXISTS "set";
-CREATE TABLE "set" (
+DROP TABLE IF EXISTS "sets";
+CREATE TABLE "sets" (
     "set_id" serial PRIMARY KEY,
+    "sets" smallint,
     "reps" smallint,
     "weight" smallint,
     "exerciseid" smallint NOT NULL,

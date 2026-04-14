@@ -31,8 +31,6 @@ const getRoutines = async () => {
         headers: { "Content-Type": "application/json" },
     });
     const raw_routines = await response.json();
-    console.log(raw_routines);
-
 
     //reduce is kind of like a reverse map (array -> single element) - mason
     routines = raw_routines.reduce((acc, row) => {
@@ -41,17 +39,23 @@ const getRoutines = async () => {
         if (existing) {
             // Add exercise to existing routine
             existing.exercises.push(
-                row.exercise_name
+                {
+                    exercise_name: row.exercise_name,
+                    exerciseid: row.exerciseid
+                }
             );
         } else {
             // Create new routine with first exercise
             acc.push({
-            routineid: row.routineid,
-            name: row.routine_name,
-            type: row.type,
-            exercises: [
-                row.exercise_name,
-            ]
+                routineid: row.routineid,
+                name: row.routine_name,
+                type: row.type,
+                exercises: [
+                        {
+                            exercise_name: row.exercise_name,
+                            exerciseid: row.exerciseid
+                        }
+                ] 
             });
         }
         return acc;
@@ -112,7 +116,7 @@ const log = () => {
             reps.setAttribute('name', workout + '-reps');
             weight.setAttribute('name', workout + '-weight');
 
-            label.innerHTML = workout.exercises[j] + ": ";
+            label.innerHTML = workout.exercises[j].exercise_name + ": ";
             name_col.appendChild(label);
             set_col.appendChild(setlabel);
             set_col.appendChild(sets);
@@ -132,37 +136,69 @@ const log = () => {
         event.preventDefault();
         
         const setData = [];
-        const formInputs = form.querySelectorAll("input");
+        const setInputs = form.querySelectorAll("input[name$='-sets']");
+        const repInputs = form.querySelectorAll("input[name$='-reps']");
+        const weightInputs = form.querySelectorAll("input[name$='-weight']");
 
-        for (let i = 0; i < formInputs.length; i += 3) {
+        const routineInfo = selector.value;
+
+        for (let i = 0; i < setInputs.length; i ++) {
             setData.push({
-                sets: formInputs[i].value,
-                reps: formInputs[i + 1].value,
-                weight: formInputs[i + 2].value
+                sets: setInputs[i].value,
+                reps: repInputs[i].value,
+                weight: weightInputs[i].value
             });
         }
+
+
+        // console.log("Set data:", setData);
+
         //handle admin submission behavior
         if(document.getElementById("display-area")) {
 
             userEntry = document.getElementById("user").value;
-            console.log(userEntry);
 
             const workoutData = {
                 userid: userEntry,
-                routineid: selector.value
+                routineid: routines[selector.value].routineid,
             }
 
-            const info = {workoutData: workoutData, sets: setData};
+            const info = {workoutData: workoutData};
+            console.log("Creating workout + sets with info:", info);
 
-            response = await fetch("/api/log-workout", {
+            fetch("/api/log-workout", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ info }),
-            });
+            })
+            .then(response => response.json())
+            .then(data => {
+                const workoutId = data.workoutId;
+                console.log("Creating sets with routines[routineInfo]:", routines[routineInfo]);
+
+                for (let i = 0; i < setData.length; i++) {
+                    const setInfo = {
+                        workoutid: workoutId,
+                        exerciseid: routines[routineInfo].exercises[i].exerciseid,
+                        sets: setData[i].sets,
+                        reps: setData[i].reps,
+                        weight: setData[i].weight
+                    }
+                    console.log("Set info:", setInfo);
+                    fetch("/api/log-set", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ setInfo }),
+                    });
+                }
+            })
+            .catch(error => console.error("Error:", error));
+
 
         }
 
         form.replaceChildren();
+        selector.value = "";
     });
 
     const selectbox = document.createElement("div");
