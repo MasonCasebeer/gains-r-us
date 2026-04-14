@@ -105,8 +105,28 @@ app.get("/api/user-workouts", async (req, res) => {
   res.json(result.rows);
 });
 
+app.get("/api/routines", async (req, res) => {
+  const result = await pool.query(
+    `
+      SELECT 
+      r.routineid,
+      r.name AS routine_name,
+      r.type,
+      e.exerciseid,
+      e.name AS exercise_name,
+      e.muscle
+      FROM routine r
+      LEFT JOIN routine_exercise re ON r.routineid = re.routineid
+      LEFT JOIN exercise e ON re.exerciseid = e.exerciseid
+      ORDER BY r.routineid, e.exerciseid
+    `
+  );
+  console.log(`GET /routines rows: ${result.rows}`);
+  res.json(result.rows);
+});
+
 app.post("/api/log-workout", async (req, res) => {
-  const { workoutData } = req.body;
+  const { workoutData } = req.body.workoutData;
   console.log("Received workout data:", workoutData);
   try {
     const result = await pool.query(
@@ -117,12 +137,16 @@ app.post("/api/log-workout", async (req, res) => {
       `,
       [workoutData.userid, workoutData.routineid]
     );
+    
     console.log(`Inserted workout with ID: ${result.rows[0].workoutid}`);
     res.json({ success: true, workoutId: result.rows[0].workoutid });
-  } catch (error) {
+  } 
+  
+  catch (error) {
     console.error("Error logging workout:", error);
     res.json({ success: false, message: "Error logging workout" });
   }
+
 });
 
 //added these so backend doesnt crash just cause call failed

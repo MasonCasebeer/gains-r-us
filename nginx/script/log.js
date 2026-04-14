@@ -1,28 +1,62 @@
 //Author: Mason Casebeer
 
-const routine1 = {
-    name: 'Push Day',
-    exercises: [
-        "Bench",
-        "Curl",
-        "OHP"
-    ]
-}
+// const routine1 = {
+//     name: 'Push Day',
+//     exercises: [
+//         "Bench",
+//         "Curl",
+//         "OHP"
+//     ]
+// }
 
-const routine2 = {
-    name: 'Pull Day',
-    exercises: [
-        "Row",
-        "Lat Pulldown",
-        "Barbell Curl"
-    ]
-}
+// const routine2 = {
+//     name: 'Pull Day',
+//     exercises: [
+//         "Row",
+//         "Lat Pulldown",
+//         "Barbell Curl"
+//     ]
+// }
 
-const routines = [routine1,routine2]
+// // const routines = [routine1,routine2]
 
-arrayLength = routines.length;
+// // arrayLength = routines.length;
 
 const component = document.querySelector(".log");
+
+var routines
+const getRoutines = async () => {
+    const response = await fetch("/api/routines", {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+    });
+    const raw_routines = await response.json();
+    console.log(raw_routines);
+
+
+    //reduce is kind of like a reverse map (array -> single element) - mason
+    routines = raw_routines.reduce((acc, row) => {
+        const existing = acc.find(r => r.routineid === row.routineid);
+        
+        if (existing) {
+            // Add exercise to existing routine
+            existing.exercises.push(
+                row.exercise_name
+            );
+        } else {
+            // Create new routine with first exercise
+            acc.push({
+            routineid: row.routineid,
+            name: row.routine_name,
+            type: row.type,
+            exercises: [
+                row.exercise_name,
+            ]
+            });
+        }
+        return acc;
+    }, []);
+}
 
 const log = () => {
     const form = document.createElement("form");
@@ -38,7 +72,7 @@ const log = () => {
 
     const label = document.createElement("label");
 
-    for (let i = 0; i < arrayLength; i++) {
+    for (let i = 0; i < routines.length; i++) {
         const workout = document.createElement("option");
         workout.value = i;
         workout.innerHTML = routines[i].name;
@@ -96,25 +130,38 @@ const log = () => {
 
     submit.addEventListener("click", async (event) => {
         event.preventDefault();
-        console.log("hello");
+        
+        const setData = [];
+        const formInputs = form.querySelectorAll("input");
+
+        for (let i = 0; i < formInputs.length; i += 3) {
+            setData.push({
+                sets: formInputs[i].value,
+                reps: formInputs[i + 1].value,
+                weight: formInputs[i + 2].value
+            });
+        }
         //handle admin submission behavior
         if(document.getElementById("display-area")) {
 
             userEntry = document.getElementById("user").value;
             console.log(userEntry);
+
             const workoutData = {
                 userid: userEntry,
                 routineid: selector.value
             }
 
+            const info = {workoutData: workoutData, sets: setData};
+
             response = await fetch("/api/log-workout", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ workoutData }),
+                body: JSON.stringify({ info }),
             });
 
-
         }
+
         form.replaceChildren();
     });
 
@@ -126,4 +173,6 @@ const log = () => {
     component.appendChild(form);
 }
 
-log();
+getRoutines().then(() => {
+    log();
+});

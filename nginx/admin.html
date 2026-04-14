@@ -20,13 +20,20 @@
     <div id = "control-panel">
         <h2> Dashboard Control </h2>
         <fieldset id = "dashboard-controls">
+            
             <button id="display"> Display table </button>
+            <br>
+
             <div id="display-area"></div>
-            <label for="user">Username:</label> 
-            <input type="text" id="user" name="username" required>
-            <div class ="log">
-                <script src = 'script/log.js'></script>
-            </div>
+            <fieldset>
+                <label for="user">Userid:</label> 
+                <input type="text" id="user" name="username" required>
+                <div class ="log">
+                    <script src = 'script/log.js'></script>
+                </div>
+            </fieldset>
+            
+            <br>
             <button> Truncate Table </button>
         </fieldset>
     </div>
