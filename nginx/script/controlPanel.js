@@ -14,7 +14,7 @@ async function displayUsers() {
     for (const user of users) {
         const userDiv = document.createElement("div");
         console.log(user);
-        userDiv.textContent = `Username: ${user.username}, Email: ${user.email}, Role: ${user.role}, id: ${user.userid}, routine: ${user.routineid}`;
+        userDiv.textContent = `User ID: ${workout.userid}, Name: ${workout.name}, Workout ID: ${workout.workoutid}, Routine: ${workout.routineid}`;
         displayArea.appendChild(userDiv);
     }
 

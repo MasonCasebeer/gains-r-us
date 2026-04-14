@@ -99,8 +99,8 @@ app.get("/api/session", (req, res) => {
 app.get("/api/user-workouts", async (req, res) => {
   const result = await pool.query(
     `
-    SELECT DISTINCT username, email, role, users.userid, workoutid, routineid FROM users
-    LEFT JOIN workout ON users.userid = workout.userid
+    SELECT DISTINCT userid, name, workoutid, routineid
+    FROM workout
     `
   );
   console.log(`GET /users rows: ${result.rows}`);
