@@ -60,7 +60,7 @@ async function register(req, res) {
 }
 
 function ensureAdmin(req, res, next) {
-  console.log("checking authroization ... ");
+  console.log("checking authorization ... ");
   console.log(`${req.session.user}`);
   if (!req.session.user || req.session.user.role !== "admin") {
     return res.status(403).json({ message: "Forbidden" });
@@ -68,6 +68,45 @@ function ensureAdmin(req, res, next) {
   next();
 }
 
-//module.exports = { register, login, ensureAdmin };
-module.exports = { login, ensureAdmin };
+const fs = require("fs");
+const path = require("path");
 
+async function resetDatabase(req, res) {
+  console.log("Attempting DB reset...");
+
+  if (process.env.NODE_ENV === "production") {
+    return res.status(403).json({ message: "Not allowed in production" });
+  }
+
+  try {
+    // drop all tables
+    await db.query(`
+      DO $$ DECLARE
+        r RECORD;
+      BEGIN
+        FOR r IN (SELECT tablename FROM pg_tables WHERE schemaname = 'public') LOOP
+          EXECUTE 'DROP TABLE IF EXISTS ' || quote_ident(r.tablename) || ' CASCADE';
+        END LOOP;
+      END $$;
+    `);
+
+    console.log("All tables dropped");
+
+    // run init.sql
+    const sqlPath = path.join(__dirname, "init.sql");
+    const sql = fs.readFileSync(sqlPath, "utf-8");
+
+    await db.query(sql);
+
+    console.log("init.sql executed");
+
+    res.json({ success: true, message: "Database reset successful" });
+
+  } catch (err) {
+    console.error("Reset failed:", err);
+    res.status(500).json({ success: false, message: "Reset failed" });
+  }
+}
+
+//module.exports = { register, login, ensureAdmin, resetDatabase };
+module.exports = { login, ensureAdmin, resetDatabase };

@@ -81,6 +81,8 @@ app.get("/api/users", auth.ensureAdmin, async (req, res) => {
   res.json(result.rows);
 });
 
+app.post("/api/admin/reset-db", auth.ensureAdmin, auth.resetDatabase);
+
 app.get("/api/logout", (req, res) => {
   req.session.destroy();
   res.json({ message: "Logged out" });
