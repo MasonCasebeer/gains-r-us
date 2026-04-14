@@ -9,14 +9,14 @@
     flex-wrap: wrap;
 }
 
-tr:nth-child(even) {
-  background-color: #e0e0e0;
+#display-area > div:nth-child(even) {
+    background-color: #e0e0e0;
 }
 
-tr:nth-child(odd) {
-  background-color: #ffffff;
+#display-area > div:nth-child(odd) {
+    background-color: #ffffff;
 }
 
-tr:nth-child(n + 8) { 
-    display: none; 
+#display-area > div:nth-child(n + 8) {
+    display: none;
 }
