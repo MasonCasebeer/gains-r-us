@@ -94,4 +94,44 @@ app.get("/api/session", (req, res) => {
     }
 });
 
+app.get("/api/user-workouts", async (req, res) => {
+  const result = await pool.query(
+    `
+    SELECT DISTINCT username, email, role, users.userid FROM users
+    LEFT JOIN workout ON users.userid = workout.userid
+    `
+  );
+  console.log(`GET /users rows: ${result.rows}`);
+  res.json(result.rows);
+});
+
+app.post("/api/log-workout", async (req, res) => {
+  const { workoutData } = req.body;
+  console.log("Received workout data:", workoutData);
+  try {
+    const result = await pool.query(
+      `
+      INSERT INTO workout (userid, routineid)
+      VALUES ($1, $2)
+      RETURNING workoutid
+      `,
+      [workoutData.userid, workoutData.routineid]
+    );
+    console.log(`Inserted workout with ID: ${result.rows[0].workoutid}`);
+    res.json({ success: true, workoutId: result.rows[0].workoutid });
+  } catch (error) {
+    console.error("Error logging workout:", error);
+    res.json({ success: false, message: "Error logging workout" });
+  }
+});
+
+//added these so backend doesnt crash just cause call failed
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('Unhandled Rejection:', reason);
+});
+
+process.on('uncaughtException', (error) => {
+  console.error('Uncaught Exception:', error);
+});
+
 app.listen(3000, () => console.log("Server running on port 3000"));

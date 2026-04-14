@@ -20,18 +20,15 @@
     <div id = "control-panel">
         <h2> Dashboard Control </h2>
         <fieldset id = "dashboard-controls">
-            <button> Display table </button>
-
+            <button id="display"> Display table </button>
+            <div id="display-area"></div>
             <label for="user">Username:</label> 
             <input type="text" id="user" name="username" required>
             <div class ="log">
                 <script src = 'script/log.js'></script>
             </div>
-            
             <button> Truncate Table </button>
-
-
-
         </fieldset>
     </div>
+    <script defer src = "script/controlPanel.js"></script>
 </body>

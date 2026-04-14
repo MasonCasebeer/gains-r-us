@@ -94,12 +94,30 @@ const log = () => {
         form.appendChild(label_box);
     });
 
-    submit.addEventListener("click", (event) => {
+    submit.addEventListener("click", async (event) => {
         event.preventDefault();
-        //normally this would submit the form to the backend database, but since we don't have a backend yet, it just clears the form
-        //TODO mason implement backend and connect form to database
+        console.log("hello");
+        //handle admin submission behavior
+        if(document.getElementById("display-area")) {
+
+            userEntry = document.getElementById("user").value;
+            console.log(userEntry);
+            const workoutData = {
+                userid: userEntry,
+                routineid: selector.value
+            }
+
+            response = await fetch("/api/log-workout", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ workoutData }),
+            });
+
+
+        }
         form.replaceChildren();
     });
+
     const selectbox = document.createElement("div");
     selectbox.setAttribute('id', 'selectbox');
     selectbox.appendChild(selector);
