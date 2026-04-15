@@ -1,7 +1,7 @@
 services:
   nginx:
     container_name: gains_nginx
-    image: nginx:alpine
+    build: ./nginx
     ports:
       - "80:80"
     depends_on:
