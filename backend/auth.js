@@ -25,7 +25,7 @@ async function login(req, res) {
   if (hash !== user.hash) return res.status(401).json({ message: "Login fAilure"});
 
   console.log(`making session: ${user.username}, ${user.role}`);
-  req.session.user = { username: user.username, role: user.role };
+  req.session.user = { username: user.username, role: user.role, userid: user.userid };
   res.json({ message: "Logged in" });
 }
 

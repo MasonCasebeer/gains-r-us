@@ -49,6 +49,7 @@ CREATE TABLE "workout_exercise" (
 DROP TABLE IF EXISTS "set";
 CREATE TABLE "set" (
     "set_id" serial PRIMARY KEY,
+    "sets" smallint,
     "reps" smallint,
     "weight" smallint,
     "exerciseid" smallint NOT NULL,
@@ -63,6 +64,6 @@ INSERT INTO "routine" VALUES ('leg day', 'strength', 1, 1);
 INSERT INTO "workout" VALUES ('squats', 1, 1, 1);
 INSERT INTO "exercise" VALUES ('squat', 'legs', 1);
 INSERT INTO "workout_exercise" VALUES (1, 1);
-INSERT INTO "set" VALUES (10, 100, 1, 1);
+INSERT INTO "set" (sets, reps, weight, exerciseid, workoutid) VALUES (1, 10, 100, 1, 1);
 --TODO 
 --write a ton of insert statements (wheeler maybe?)

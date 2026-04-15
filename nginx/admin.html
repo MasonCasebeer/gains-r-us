@@ -21,15 +21,16 @@
         <h2> Dashboard Control </h2>
         <fieldset id = "dashboard-controls">
             
-            <button id="display"> Display table </button>
+            <button id="display"> Display Users and Workouts </button>
             <br>
 
             <div id="display-area"></div>
             <fieldset>
                 <label for="user">Userid:</label> 
-                <input type="text" id="user" name="username" required>
-                <div class ="log">
-                    <script src = 'script/log.js'></script>
+                <input type="text" id="user" name="username" required class="log-input">
+                <button id="add-workout">Add Workout for User</button>
+                <div class ="log" style="display: none;">
+                    <script src = 'script/log.js?v=2'></script>
                 </div>
             </fieldset>
             
@@ -37,5 +38,5 @@
             <button> Truncate Table </button>
         </fieldset>
     </div>
-    <script defer src = "script/controlPanel.js"></script>
+    <script src = "script/controlPanel.js"></script>
 </body>

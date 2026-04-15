@@ -22,7 +22,12 @@
 
 // // arrayLength = routines.length;
 
+console.log("log.js loaded");
 const component = document.querySelector(".log");
+
+if (!component) {
+    console.error("log.js: .log element not found");
+}
 
 var routines
 const getRoutines = async () => {
@@ -65,14 +70,42 @@ const getRoutines = async () => {
 const log = () => {
     const form = document.createElement("form");
     const selector = document.createElement("select");
+    const workoutNameInput = document.createElement("input");
     const submit = document.createElement("input");
+    const workoutNameContainer = document.createElement("div");
+    const workoutNameLabel = document.createElement("label");
+
     form.setAttribute('id', 'log-form');
     submit.type = "submit";
     submit.value = "Submit";
     selector.name = "workout";
     selector.setAttribute('class', 'log-button');
-    submit.setAttribute('class', ',log-button');
-    selector.appendChild(document.createElement("option"));
+    submit.setAttribute('class', 'log-button');
+
+    workoutNameInput.type = "text";
+    workoutNameInput.id = "workout-name";
+    workoutNameInput.placeholder = "Workout Name (optional)";
+    workoutNameInput.setAttribute('class', 'log-input');
+
+    workoutNameLabel.setAttribute('for', 'workout-name');
+    workoutNameLabel.textContent = "Workout Name:";
+    workoutNameLabel.setAttribute('class', 'log-label');
+
+    workoutNameContainer.setAttribute('id', 'workout-name-container');
+    workoutNameContainer.style.display = "none";
+    workoutNameContainer.style.marginTop = "0.75rem";
+    workoutNameContainer.style.flexDirection = "column";
+    workoutNameContainer.style.gap = "0.25rem";
+    workoutNameContainer.style.width = "100%";
+    workoutNameContainer.style.alignItems = "flex-start";
+    workoutNameContainer.style.display = "none";
+    workoutNameContainer.appendChild(workoutNameLabel);
+    workoutNameContainer.appendChild(workoutNameInput);
+
+    const defaultOption = document.createElement("option");
+    defaultOption.value = "";
+    defaultOption.textContent = "-- Select a Routine --";
+    selector.appendChild(defaultOption);
 
     const label = document.createElement("label");
 
@@ -84,9 +117,20 @@ const log = () => {
     }
 
     selector.addEventListener("change", (event) => {
-        form.replaceChildren();
         const index = event.target.value;
-        const workout = routines[event.target.value];
+        console.log("selector changed to", index);
+        if (index === "") {
+            workoutNameContainer.style.display = "none";
+            form.replaceChildren();
+            return;
+        }
+
+        workoutNameContainer.style.display = "flex";
+        workoutNameContainer.style.flexDirection = "column";
+        workoutNameContainer.style.width = "100%";
+
+        form.replaceChildren();
+        const workout = routines[index];
         const label_box = document.createElement("label-box")
         label_box.setAttribute('id','label-box');
         
@@ -157,10 +201,12 @@ const log = () => {
         if(document.getElementById("display-area")) {
 
             userEntry = document.getElementById("user").value;
+            const workoutName = document.getElementById("workout-name").value;
 
             const workoutData = {
                 userid: userEntry,
                 routineid: routines[selector.value].routineid,
+                name: workoutName
             }
 
             const info = {workoutData: workoutData};
@@ -195,6 +241,53 @@ const log = () => {
             .catch(error => console.error("Error:", error));
 
 
+        } else {
+            // regular user
+            const workoutName = document.getElementById("workout-name").value;
+
+            fetch("/api/session")
+            .then(response => response.json())
+            .then(session => {
+                if (session.loggedIn) {
+                    const workoutData = {
+                        userid: session.user.userid,
+                        routineid: routines[selector.value].routineid,
+                        name: workoutName
+                    }
+
+                    const info = {workoutData: workoutData};
+                    console.log("Creating workout + sets with info:", info);
+
+                    fetch("/api/log-workout", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ info }),
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        const workoutId = data.workoutId;
+                        console.log("Creating sets with routines[routineInfo]:", routines[routineInfo]);
+
+                        for (let i = 0; i < setData.length; i++) {
+                            const setInfo = {
+                                workoutid: workoutId,
+                                exerciseid: routines[routineInfo].exercises[i].exerciseid,
+                                sets: setData[i].sets,
+                                reps: setData[i].reps,
+                                weight: setData[i].weight
+                            }
+                            console.log("Set info:", setInfo);
+                            fetch("/api/log-set", {
+                                method: "POST",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({ setInfo }),
+                            });
+                        }
+                    })
+                    .catch(error => console.error("Error:", error));
+                }
+            })
+            .catch(error => console.error("Error fetching session:", error));
         }
 
         form.replaceChildren();
@@ -203,6 +296,7 @@ const log = () => {
 
     const selectbox = document.createElement("div");
     selectbox.setAttribute('id', 'selectbox');
+    component.appendChild(workoutNameContainer);
     selectbox.appendChild(selector);
     selectbox.appendChild(submit);
     component.appendChild(selectbox);

@@ -158,6 +158,15 @@ body{
     max-height: 1.5em;
 }
 
+.log-input {
+    padding: 8px;
+    margin: 4px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 200px;
+    font-size: 14px;
+}
+
 .modal {
     display: none;
     position: fixed;

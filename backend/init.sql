@@ -72,3 +72,5 @@ INSERT INTO "exercise" VALUES ('Squat', 'Legs', 1);
 INSERT INTO "exercise" VALUES ('Deadlift', 'Back', 2);
 INSERT into "routine_exercise" VALUES (1, 1);
 INSERT into "routine_exercise" VALUES (1, 2);
+
+INSERT INTO "workout" (name, workoutid, routineid, userid) VALUES ('Morning Leg Day', 1, 1, 1);

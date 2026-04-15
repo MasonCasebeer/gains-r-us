@@ -99,11 +99,18 @@ app.get("/api/session", (req, res) => {
 app.get("/api/user-workouts", async (req, res) => {
   const result = await pool.query(
     `
-    SELECT DISTINCT userid, name, workoutid, routineid
-    FROM workout
+    SELECT u.userid,
+           u.username,
+           COALESCE(NULLIF(CONCAT_WS(' ', u.name, u.surname), ''), u.username) as display_name,
+           w.workoutid,
+           w.routineid,
+           w.name as workout_name
+    FROM "users" u
+    LEFT JOIN workout w ON u.userid = w.userid
+    ORDER BY u.userid, w.workoutid
     `
   );
-  console.log(`GET /users rows: ${result.rows}`);
+  console.log(`GET /user-workouts rows: ${result.rows}`);
   res.json(result.rows);
 });
 
@@ -140,11 +147,11 @@ app.post("/api/log-workout", async (req, res) => {
   try {
     const result = await pool.query(
       `
-      INSERT INTO workout (userid, routineid)
-      VALUES ($1, $2)
+      INSERT INTO workout (userid, routineid, name)
+      VALUES ($1, $2, $3)
       RETURNING workoutid
       `,
-      [workoutData.userid, workoutData.routineid]
+      [workoutData.userid, workoutData.routineid, workoutData.name]
     );
     
     console.log(`Inserted workout with ID: ${result.rows[0].workoutid}`);
@@ -171,7 +178,7 @@ app.post("/api/log-set", async (req, res) => {
   try {
     const result = await pool.query(
       `
-      INSERT INTO sets (workoutid, exerciseid, sets, reps, weight)
+      INSERT INTO "set" (workoutid, exerciseid, sets, reps, weight)
       VALUES ($1, $2, $3, $4, $5)
       RETURNING set_id
       `,
