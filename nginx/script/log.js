@@ -1,28 +1,4 @@
 //Author: Mason Casebeer
-
-// const routine1 = {
-//     name: 'Push Day',
-//     exercises: [
-//         "Bench",
-//         "Curl",
-//         "OHP"
-//     ]
-// }
-
-// const routine2 = {
-//     name: 'Pull Day',
-//     exercises: [
-//         "Row",
-//         "Lat Pulldown",
-//         "Barbell Curl"
-//     ]
-// }
-
-// // const routines = [routine1,routine2]
-
-// // arrayLength = routines.length;
-
-console.log("log.js loaded");
 const component = document.querySelector(".log");
 
 if (!component) {
@@ -195,17 +171,19 @@ const log = () => {
         }
 
 
-        // console.log("Set data:", setData);
 
         //handle admin submission behavior
-        if(document.getElementById("display-area")) {
+        const currentPage = document.body.getAttribute("data-page");
+
+        console.log("Current page:", currentPage);
+        if(currentPage === "admin") {
 
             userEntry = document.getElementById("user").value;
             const workoutName = document.getElementById("workout-name").value;
 
             const workoutData = {
                 userid: userEntry,
-                routineid: routines[selector.value].routineid,
+                routineid: routines[routineInfo].routineid,
                 name: workoutName
             }
 
@@ -241,7 +219,8 @@ const log = () => {
             .catch(error => console.error("Error:", error));
 
 
-        } else {
+        } 
+        else {
             // regular user
             const workoutName = document.getElementById("workout-name").value;
 
@@ -249,9 +228,12 @@ const log = () => {
             .then(response => response.json())
             .then(session => {
                 if (session.loggedIn) {
+                    console.log(routines);
+                    console.log(routineInfo);
+                    
                     const workoutData = {
                         userid: session.user.userid,
-                        routineid: routines[selector.value].routineid,
+                        routineid: routines[routineInfo].routineid,
                         name: workoutName
                     }
 

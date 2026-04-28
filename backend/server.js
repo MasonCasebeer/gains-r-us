@@ -97,20 +97,40 @@ app.get("/api/session", (req, res) => {
 });
 
 app.get("/api/user-workouts", async (req, res) => {
-  const result = await pool.query(
-    `
-    SELECT u.userid,
-           u.username,
-           COALESCE(NULLIF(CONCAT_WS(' ', u.name, u.surname), ''), u.username) as display_name,
-           w.workoutid,
-           w.routineid,
-           w.name as workout_name
-    FROM "users" u
-    LEFT JOIN workout w ON u.userid = w.userid
-    ORDER BY u.userid, w.workoutid
-    `
-  );
-  console.log(`GET /user-workouts rows: ${result.rows}`);
+  const name = req.query.name;
+
+  let query;
+  let params = [];
+
+  if (name) {
+    query = `
+      SELECT u.userid,
+             u.username,
+             COALESCE(NULLIF(CONCAT_WS(' ', u.name, u.surname), ''), u.username) as display_name,
+             w.workoutid,
+             w.routineid,
+             w.name as workout_name
+      FROM "users" u
+      LEFT JOIN workout w ON u.userid = w.userid
+      WHERE u.username = $1
+      ORDER BY u.userid, w.workoutid
+    `;
+    params = [name];
+  } else {
+    query = `
+      SELECT u.userid,
+             u.username,
+             COALESCE(NULLIF(CONCAT_WS(' ', u.name, u.surname), ''), u.username) as display_name,
+             w.workoutid,
+             w.routineid,
+             w.name as workout_name
+      FROM "users" u
+      LEFT JOIN workout w ON u.userid = w.userid
+      ORDER BY u.userid, w.workoutid
+    `;
+  }
+
+  const result = await pool.query(query, params);
   res.json(result.rows);
 });
 

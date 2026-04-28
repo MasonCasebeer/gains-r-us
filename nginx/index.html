@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="/index.css">
     <title> Gains R Us </title>    
 </head>
-<body>
+<body data-page="index">
     <nav class="navbar">
         <H1> Gains R Us </H1>
         <ul class="nav-links">
@@ -21,7 +21,10 @@
 
     <div class="main-content">
         <div class="sidebar">
-            <div class="calendar-container">
+            <button id="display"> Workouts </button>
+            <div id="display-area"></div>
+            <script type="module" src = "script/controlPanel.js" defer></script>
+            <!-- <div class="calendar-container">
                 <header class="calendar-header">
                     <p class="calendar-current-date"></p>
                     <div class="calendar-navigation">
@@ -46,7 +49,7 @@
                     </ul>
                     <ul class="calendar-dates"></ul>
                 </div>
-            </div>
+            </div> -->
         </div>
 
         <div class = "daily">
@@ -64,8 +67,8 @@
         Gains R Us is a joint collaboration of Casebeer, Witte, Wheeler
     </div>
 
-    <script src="script/calendar.js"></script>
-    <script defer src="script/loginStatus.js"></script>
+    <!-- <script src="script/calendar.js"></script> -->
+    <script type = "module" defer src="script/loginStatus.js"></script>
     <script defer src="script/adminPage.js"></script>
 
     <div id="loginModal" class="modal">

@@ -75,4 +75,15 @@ async function checkLoginStatus() {
     }
 }
 
+export async function getLoginStatus() {
+    try {
+        const response = await fetch("/api/session");
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error("Error while fetching login status:", error);
+        return null;
+    }
+}
+
 checkLoginStatus();

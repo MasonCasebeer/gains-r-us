@@ -1,18 +1,28 @@
-
+import {getLoginStatus} from './loginStatus.js';
 const display = document.getElementById("display");
 const displayArea = document.getElementById("display-area");
 const addWorkoutBtn = document.getElementById("add-workout");
 const logDiv = document.querySelector(".log");
 
-console.log("controlPanel.js loaded");
-alert("controlPanel.js loaded");
 
-async function displayUsers() {
+async function displayUsers(name = "All") {
+
     console.log("displayUsers called");
-    const response = await fetch("/api/user-workouts", {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-    });
+    var response;
+    if(name == "All") {
+        response = await fetch("/api/user-workouts", {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+        });
+    }
+    else {
+        console.log(`Fetching workouts for user: ${name}`);
+        response = await fetch(`/api/user-workouts?name=${name}`, {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+        });
+    }
+
     const users = await response.json();
     console.log("users:", users);
     displayArea.replaceChildren();
@@ -63,12 +73,22 @@ async function displayUsers() {
     displayArea.appendChild(table);
 }
 
-display.addEventListener("click", () => {
-    console.log("display button clicked");
-    displayUsers();
+display.addEventListener("click", async (event) => {
+    const currentPage = document.body.getAttribute("data-page");
+    if(currentPage === "index") {
+        try {
+            const data = await getLoginStatus();
+            displayUsers(data.user.username);
+        } catch (error) {
+            console.error("Error fetching session data:", error);
+        }
+    }
+    else if(currentPage === "admin") {
+        displayUsers();
+    }
 });
 
-addWorkoutBtn.addEventListener("click", () => {
-    console.log("add workout button clicked");
-    logDiv.style.display = "block";
-});
+// addWorkoutBtn.addEventListener("click", () => {
+//     console.log("add workout button clicked");
+//     logDiv.style.display = "block";
+// });
