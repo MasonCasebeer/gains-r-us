@@ -32,6 +32,7 @@ CREATE TABLE "workout" (
 	"workoutid" serial PRIMARY KEY,
     "routineid" smallint NOT NULL,
     "userid" smallint NOT NULL,
+    "date" timestamp default timezone('UTC', now()), 
     FOREIGN KEY ("userid") REFERENCES "users"("userid"),
     FOREIGN KEY ("routineid") REFERENCES "routine"("routineid")
 );
@@ -68,8 +69,8 @@ INSERT INTO "users" (userid, username, email, hash, salt, role)
 VALUES (1, 'admin', 'admin@gmail,com', '5ae57bd0414728855fe98c51c642d1f1788f17d1ac56b7c351ff6fa2f70b1810a14a49a9b14ecfec865c4f95c8d55d25d2df7e18277de268aba990a4eb551d68', 'abe86680cdb058b5c404fc31bcaf9887', 'admin');
 
 INSERT INTO "routine" VALUES ('leg day', 'strength', 1, 1);
-INSERT INTO "exercise" VALUES ('Squat', 'Legs', 1);
-INSERT INTO "exercise" VALUES ('Deadlift', 'Back', 2);
+INSERT INTO "exercise" VALUES ('Squat', 'Lower Body', 1);
+INSERT INTO "exercise" VALUES ('Deadlift', 'Lower Body', 2);
 INSERT into "routine_exercise" VALUES (1, 1);
 INSERT into "routine_exercise" VALUES (1, 2);
 

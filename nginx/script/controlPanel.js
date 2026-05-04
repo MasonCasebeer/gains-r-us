@@ -4,7 +4,7 @@ const displayArea = document.getElementById("display-area");
 const addWorkoutBtn = document.getElementById("add-workout");
 const logDiv = document.querySelector(".log");
 
-
+//display user table for admin page 
 async function displayUsers(name = "All") {
 
     console.log("displayUsers called");
@@ -71,14 +71,89 @@ async function displayUsers(name = "All") {
     });
     table.appendChild(tbody);
     displayArea.appendChild(table);
+    
+}
+
+//pretty display of user data for users
+async function displayUsersRich() {
+
+    const data = await getLoginStatus();
+    const username = data.user.username;
+    const userid = data.user.userid;
+    displayArea.replaceChildren();
+
+    var response;
+    response = await fetch(`/api/user-workouts?user=${username}`, {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+    });
+    
+    const users = await response.json();
+
+    var workoutInfo;
+    workoutInfo = await fetch(`/api/user/workout-sets/?userid=${userid}`, {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+    });
+    const workouts = await workoutInfo.json();
+
+        console.log(workouts);
+
+    if (users.length === 0) {
+        displayArea.textContent = "No workouts found.";
+        return;
+    }    
+
+    const list = document.createElement("ul");
+    const tbody = document.createElement("tbody");
+
+    users.forEach((user, index) => {
+        const setInfo = document.createElement("details");
+        const summary = document.createElement("summary");
+        summary.textContent = `Expand Sets:`;
+        setInfo.appendChild(summary);
+
+        const setList = document.createElement("ul");
+        workouts.forEach((workout) => {
+            const listItem = document.createElement("li");
+            listItem.textContent = `Exercise: ${workout.exercise_name}, Set: ${workout.sets}, Reps: ${workout.reps}, Weight: ${workout.weight}`;
+            setList.appendChild(listItem);
+        });
+        setInfo.appendChild(setList);
+        
+        console.log(workouts);
+        const row = document.createElement("tr");
+        const values = [
+            user.username || "N/A",
+            user.workout_name || "Workout"
+        ];
+        values.forEach(value => {
+            const td = document.createElement("td");
+            td.textContent = value;
+            td.style.border = "1px solid #ddd";
+            td.style.padding = "8px";
+            row.appendChild(td);
+        });
+        tbody.appendChild(row);
+        tbody.appendChild(setInfo);
+
+    });
+
+   list.appendChild(tbody);
+   displayArea.appendChild(list);
+}
+
+//expand a workout to show its sets
+async function expandWorkout(workoutId) {
+
+
 }
 
 display.addEventListener("click", async (event) => {
     const currentPage = document.body.getAttribute("data-page");
     if(currentPage === "index") {
         try {
-            const data = await getLoginStatus();
-            displayUsers(data.user.username);
+            displayUsersRich();
         } catch (error) {
             console.error("Error fetching session data:", error);
         }
@@ -88,7 +163,3 @@ display.addEventListener("click", async (event) => {
     }
 });
 
-// addWorkoutBtn.addEventListener("click", () => {
-//     console.log("add workout button clicked");
-//     logDiv.style.display = "block";
-// });

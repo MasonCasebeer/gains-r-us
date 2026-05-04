@@ -97,7 +97,7 @@ app.get("/api/session", (req, res) => {
 });
 
 app.get("/api/user-workouts", async (req, res) => {
-  const name = req.query.name;
+  const name = req.query.user;
 
   let query;
   let params = [];
@@ -111,7 +111,7 @@ app.get("/api/user-workouts", async (req, res) => {
              w.routineid,
              w.name as workout_name
       FROM "users" u
-      LEFT JOIN workout w ON u.userid = w.userid
+      INNER JOIN workout w ON u.userid = w.userid
       WHERE u.username = $1
       ORDER BY u.userid, w.workoutid
     `;
@@ -132,6 +132,40 @@ app.get("/api/user-workouts", async (req, res) => {
 
   const result = await pool.query(query, params);
   res.json(result.rows);
+});
+
+// Get sets from a specific workout. Should be used in user view to "expand" the workout
+app.get("/api/user/workout-sets", async (req, res) => {
+  const userid = req.query.userid;
+  let query;
+  let params = [];
+
+  if(userid) {
+    query = `
+        SELECT 
+              w.workoutid,
+              w.routineid,
+              w.name as workout_name,
+              w.date as date,
+              e.name as exercise_name,
+              e.muscle as exercise_muscle,
+              s.exerciseid,
+              s.sets,
+              s.reps,
+              s.weight
+        FROM "sets" s
+        INNER JOIN workout w ON s.workoutid = w.workoutid
+        INNER JOIN "exercise" e ON s.exerciseid = e.exerciseid
+        WHERE w.userid = $1
+    `;
+    params = [userid];
+
+    const result = await pool.query(query, params);
+    res.json(result.rows);
+  }
+  else {
+    res.status(400).json({ success: false, message: "Missing user parameter" });
+  }
 });
 
 app.get("/api/routines", async (req, res) => {
@@ -198,15 +232,15 @@ app.post("/api/log-set", async (req, res) => {
   try {
     const result = await pool.query(
       `
-      INSERT INTO "set" (workoutid, exerciseid, sets, reps, weight)
+      INSERT INTO "sets" (workoutid, exerciseid, sets, reps, weight)
       VALUES ($1, $2, $3, $4, $5)
       RETURNING set_id
       `,
       [setInfo.workoutid, setInfo.exerciseid, setInfo.sets, setInfo.reps, setInfo.weight]
     );
     
-    console.log(`Inserted set with ID: ${result.rows[0].setid}`);
-    res.json({ success: true, setId: result.rows[0].setid });
+    console.log(`Inserted set with ID: ${result.rows[0].set_id}`);
+    res.json({ success: true, setId: result.rows[0].set_id });
   } 
   
   catch (error) {
