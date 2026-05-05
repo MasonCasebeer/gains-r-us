@@ -138,15 +138,10 @@ async function displayUsersRich() {
         tbody.appendChild(setInfo);
 
     });
-
-   list.appendChild(tbody);
-   displayArea.appendChild(list);
-}
-
-//expand a workout to show its sets
-async function expandWorkout(workoutId) {
-
-
+    
+    tbody.setAttribute("class", "workout-table");
+    list.appendChild(tbody);
+    displayArea.appendChild(list);
 }
 
 display.addEventListener("click", async (event) => {
