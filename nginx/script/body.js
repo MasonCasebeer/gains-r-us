@@ -61,18 +61,24 @@ async function getMuscleGroups() {
 
     workouts.forEach((workout) => {
         if (Date.now() - new Date(workout.date).getTime() < 3 * 24 * 60 * 60 * 1000) {
-            const group = workout.eercise_muscle;
+            const group = workout.exercise_muscle;
             // console.log(workout);
+            if(!group) {
+                return;
+            }
             if(!muscleGroups[group]) {
                 muscleGroups[group] = 0;
             }
             muscleGroups[group]  = muscleGroups[group] + (workout.sets * workout.reps*workout.weight);
         }
    });
+
+//    console.log(muscleGroups);
     return muscleGroups;
 }
 
 window.addEventListener('workoutSubmitted', (e) => {
     body();
 });
+
 body();

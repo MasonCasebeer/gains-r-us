@@ -97,7 +97,7 @@ async function displayUsersRich() {
     });
     const workouts = await workoutInfo.json();
 
-        console.log(workouts);
+        // console.log(workouts);
 
     if (users.length === 0) {
         displayArea.textContent = "No workouts found.";
