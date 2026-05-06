@@ -1,28 +1,30 @@
 #control-panel {
     position: absolute;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 body {
-    overflow: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 #dashboard-controls {
     position: relative;
-    overflow: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
     display: flex;
     flex-direction: column;
-    flex-wrap: wrap;
 }
 
 #display-area {
-    text-align: center;
 }
 
 #display-area table {
-    margin: 0;
-    width: auto;
+    margin: 0 auto;
+    width: 90%;
     border-collapse: collapse;
-    display: inline-table;
+}
 }
 
 #display-area th, #display-area td {
