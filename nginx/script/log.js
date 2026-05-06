@@ -1,5 +1,6 @@
 //Author: Mason Casebeer
 const component = document.querySelector(".log");
+import {getLoginStatus} from './loginStatus.js';
 
 if (!component) {
     console.error("log.js: .log element not found");
@@ -43,13 +44,20 @@ const getRoutines = async () => {
     }, []);
 }
 
-const log = () => {
+async function log() {
     const form = document.createElement("form");
     const selector = document.createElement("select");
     const workoutNameInput = document.createElement("input");
     const submit = document.createElement("input");
     const workoutNameContainer = document.createElement("div");
     const workoutNameLabel = document.createElement("label");
+    const data = await getLoginStatus();
+
+    if(!data.loggedIn) {
+        component.innerHTML = "<p>Please log in to log workouts.</p>";
+        return;
+    }
+
 
     form.setAttribute('id', 'log-form');
     submit.type = "submit";
@@ -94,7 +102,7 @@ const log = () => {
 
     selector.addEventListener("change", (event) => {
         const index = event.target.value;
-        console.log("selector changed to", index);
+        // console.log("selector changed to", index);
         if (index === "") {
             workoutNameContainer.style.display = "none";
             form.replaceChildren();
@@ -155,12 +163,22 @@ const log = () => {
     submit.addEventListener("click", async (event) => {
         event.preventDefault();
         
+        const routineInfo = selector.value;
+        
+        if(!routineInfo) {
+            console.log("no routine selected");
+            return;
+        }
+        
         const setData = [];
         const setInputs = form.querySelectorAll("input[name$='-sets']");
         const repInputs = form.querySelectorAll("input[name$='-reps']");
         const weightInputs = form.querySelectorAll("input[name$='-weight']");
 
-        const routineInfo = selector.value;
+        if(setInputs.length === 0) {
+            console.log("no exercises in routine or form not populated");
+            return;
+        }
 
         for (let i = 0; i < setInputs.length; i ++) {
             setData.push({
@@ -170,12 +188,10 @@ const log = () => {
             });
         }
 
-
-
         //handle admin submission behavior
         const currentPage = document.body.getAttribute("data-page");
 
-        console.log("Current page:", currentPage);
+        // console.log("Current page:", currentPage);
         if(currentPage === "admin") {
 
             userEntry = document.getElementById("user").value;
@@ -228,8 +244,8 @@ const log = () => {
             .then(response => response.json())
             .then(session => {
                 if (session.loggedIn) {
-                    console.log(routines);
-                    console.log(routineInfo);
+                    // console.log(routines);
+                    // console.log(routineInfo);
                     
                     const workoutData = {
                         userid: session.user.userid,
@@ -274,6 +290,10 @@ const log = () => {
 
         form.replaceChildren();
         selector.value = "";
+        
+        //alert controlPanel that we added a workout
+        const customEvent = new CustomEvent('workoutSubmitted', { detail: { data: 'hello' } });
+        window.dispatchEvent(customEvent);
     });
 
     const selectbox = document.createElement("div");

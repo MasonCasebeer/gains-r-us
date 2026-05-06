@@ -114,29 +114,34 @@ async function displayUsersRich() {
         setInfo.appendChild(summary);
 
         const setList = document.createElement("ul");
-        workouts.forEach((workout) => {
+        // Filter workouts to only show sets for this specific workout
+        const workoutSets = workouts.filter(w => w.workoutid === user.workoutid);
+        workoutSets.forEach((workout) => {
             const listItem = document.createElement("li");
             listItem.textContent = `Exercise: ${workout.exercise_name}, Set: ${workout.sets}, Reps: ${workout.reps}, Weight: ${workout.weight}`;
             setList.appendChild(listItem);
         });
         setInfo.appendChild(setList);
         
-        console.log(workouts);
+        // console.log(workouts);
         const row = document.createElement("tr");
-        const values = [
-            user.username || "N/A",
-            user.workout_name || "Workout"
-        ];
-        values.forEach(value => {
-            const td = document.createElement("td");
-            td.textContent = value;
-            td.style.border = "1px solid #ddd";
-            td.style.padding = "8px";
-            row.appendChild(td);
-        });
+        
+        // Workout name cell
+        const titleTd = document.createElement("td");
+        const title = user.workout_name || "Workout"
+        titleTd.textContent = `${title}`;
+        titleTd.style.border = "1px solid #ddd";
+        titleTd.style.padding = "8px";
+        row.appendChild(titleTd);
+        
+        // Expandable sets cell
+        const setsTd = document.createElement("td");
+        setsTd.appendChild(setInfo);
+        setsTd.style.border = "1px solid #ddd";
+        setsTd.style.padding = "8px";
+        row.appendChild(setsTd);
+        
         tbody.appendChild(row);
-        tbody.appendChild(setInfo);
-
     });
     
     tbody.setAttribute("class", "workout-table");
@@ -156,5 +161,9 @@ display.addEventListener("click", async (event) => {
     else if(currentPage === "admin") {
         displayUsers();
     }
+});
+
+window.addEventListener('workoutSubmitted', (e) => {
+    displayUsersRich();
 });
 

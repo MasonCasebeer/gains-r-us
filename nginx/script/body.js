@@ -4,6 +4,7 @@ const body_component = document.querySelector(".body");
 
 const body = () => {
     //arbitraryish total volume limits for muscle groups 
+    body_component.replaceChildren();
     const codedLimits = {
         "Upper Body": 10000,
         "Lower Body": 20000,
@@ -11,10 +12,9 @@ const body = () => {
     }
 
     getMuscleGroups().then((muscleGroups) => {
-
             //Display soreness of muscle groups
             for (const muscleGroup in muscleGroups) {
-                console.log(muscleGroup);
+                // console.log(muscleGroup);
                 if(!muscleGroup in codedLimits) {
                     codedLimits[muscleGroup] = 10000;
                 }
@@ -61,8 +61,8 @@ async function getMuscleGroups() {
 
     workouts.forEach((workout) => {
         if (Date.now() - new Date(workout.date).getTime() < 3 * 24 * 60 * 60 * 1000) {
-            const group = workout.exercise_muscle;
-            console.log(workout);
+            const group = workout.eercise_muscle;
+            // console.log(workout);
             if(!muscleGroups[group]) {
                 muscleGroups[group] = 0;
             }
@@ -72,4 +72,7 @@ async function getMuscleGroups() {
     return muscleGroups;
 }
 
+window.addEventListener('workoutSubmitted', (e) => {
+    body();
+});
 body();
