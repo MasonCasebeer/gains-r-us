@@ -7,6 +7,9 @@ proper commands to fix
 Casebeer po5: used AI to debug my docker-compose when I was getting an NGINX error, as well as bugfixing my SQL statements and generating example code and suggesting
 best practices for interperting and parsing the returend tables
 
+casebeer po6/po7 used AI for debugging multiple SQl errors and interperting JS messages, used for guidance on processing json returns and requests
+
+
 Wheeler: Used an existing project https://www.geeksforgeeks.org/javascript/how-to-design-a-simple-calendar-using-javascript/ to implement the calendar portion
 
 Witte: Used https://www.w3schools.com/howto/howto_css_login_form.asp to learn how to make a login page and what a modal login is.

@@ -6,7 +6,9 @@ const displayArea = document.getElementById("display-area");
 const exitAddBtn = document.getElementById("exit-add");
 
 // Initially hide the display area
-displayArea.style.display = 'none';
+if (displayArea) {
+    displayArea.style.display = 'none';
+}
 
 //display user table for admin page 
 async function displayUsers(name = "All", editable = false) {
@@ -158,40 +160,47 @@ async function displayUsersRich() {
     tbody.setAttribute("class", "workout-table");
     list.appendChild(tbody);
     displayArea.appendChild(list);
+    displayArea.style.display = 'block';
 }
 
-display.addEventListener("click", async (event) => {
-    const currentPage = document.body.getAttribute("data-page");
-    if(currentPage === "index") {
-        try {
-            displayUsersRich();
-        } catch (error) {
-            console.error("Error fetching session data:", error);
+if (display) {
+    display.addEventListener("click", async (event) => {
+        const currentPage = document.body.getAttribute("data-page");
+        if(currentPage === "index") {
+            try {
+                displayUsersRich();
+            } catch (error) {
+                console.error("Error fetching session data:", error);
+            }
         }
-    }
-    else if(currentPage === "admin") {
-        if (displayArea.style.display === 'none') {
-            displayArea.style.display = 'block';
-            displayUsers("All", false);
+        else if(currentPage === "admin") {
+            if (displayArea.style.display === 'none') {
+                displayArea.style.display = 'block';
+                displayUsers("All", false);
+            } else {
+                displayArea.style.display = 'none';
+            }
+        }
+    });
+}
+
+if (addWorkoutBtn) {
+    addWorkoutBtn.addEventListener("click", () => {
+        const userValue = document.getElementById("user").value.trim();
+        if (userValue) {
+            displayUsers(userValue, true);
+            if (logDiv) logDiv.style.display = "block";
         } else {
-            displayArea.style.display = 'none';
+            alert("Please enter a userid");
         }
-    }
-});
+    });
+}
 
-addWorkoutBtn.addEventListener("click", () => {
-    const userValue = document.getElementById("user").value.trim();
-    if (userValue) {
-        displayUsers(userValue, true);
-        logDiv.style.display = "block";
-    } else {
-        alert("Please enter a userid");
-    }
-});
-
-exitAddBtn.addEventListener("click", () => {
-    logDiv.style.display = "none";
-});
+if (exitAddBtn) {
+    exitAddBtn.addEventListener("click", () => {
+        if (logDiv) logDiv.style.display = "none";
+    });
+}
 
 window.addEventListener('workoutSubmitted', (e) => {
     const currentPage = document.body.getAttribute("data-page");

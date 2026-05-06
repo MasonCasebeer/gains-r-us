@@ -265,7 +265,73 @@ app.post("/api/log-set", async (req, res) => {
 
 });
 
+app.post("/api/create-exercise", async (req, res) => {
+  try {
+    const exerciseData = req.body.exerciseData;
+    
+    if(!exerciseData) {
+      console.error("Missing exerciseData in request body");
+      return res.status(400).json({ success: false, message: "Missing exerciseData" });
+    }
 
+    const exerciseIds = [];
+    for (const exercise of exerciseData) {
+      const result = await pool.query(
+        `
+        INSERT INTO exercise (name, muscle)
+        VALUES ($1, $2)
+        RETURNING exerciseid
+        `,
+        [exercise.name, exercise.muscle]
+      );
+      console.log(`Inserted exercise with ID: ${result.rows[0].exerciseid}`);
+      exerciseIds.push(result.rows[0].exerciseid);
+    }
+    res.json(exerciseIds);
+  }
+  catch (error) {
+    console.error("Error logging exercise:", error);
+    res.json({ success: false, message: "Error logging exercise" });
+  }
+});
+
+app.post("/api/create-routine", async (req, res) => {
+  try {
+    const routineData = req.body.routineData;
+    if(!routineData) {
+      console.error("Missing routineData in request body");
+      return res.status(400).json({ success: false, message: "Missing routineData" });
+    }
+
+    const routineResult = await pool.query(
+      `
+      INSERT INTO routine (name, type, userid)
+      VALUES ($1, $2, $3)
+      RETURNING routineid
+      `,
+      [routineData.name, routineData.type, routineData.userid]
+    );
+    const routineId = routineResult.rows[0].routineid;
+    console.log(`Inserted routine with ID: ${routineId}`);
+
+    for (const exerciseId of routineData.exerciseIds) {
+      await pool.query(
+        `
+        INSERT INTO routine_exercise (routineid, exerciseid)
+        VALUES ($1, $2)
+        `,
+        [routineId, exerciseId]
+      );
+    }
+    
+    res.json({ success: true, routineId });
+
+  }  
+  catch (error) {
+    console.error("Error logging routine:", error);
+    res.json({ success: false, message: "Error logging routine" });
+  }
+});
 
 //added these so backend doesnt crash just cause call failed
 process.on('unhandledRejection', (reason, promise) => {
