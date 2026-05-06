@@ -1,6 +1,11 @@
 #control-panel {
     position: absolute;
 }
+
+body {
+    overflow: auto;
+}
+
 #dashboard-controls {
     position: relative;
     overflow: auto;
@@ -9,9 +14,15 @@
     flex-wrap: wrap;
 }
 
+#display-area {
+    text-align: center;
+}
+
 #display-area table {
-    width: 100%;
+    margin: 0;
+    width: auto;
     border-collapse: collapse;
+    display: inline-table;
 }
 
 #display-area th, #display-area td {
@@ -41,13 +52,71 @@
     font-size: 14px;
 }
 
+select {
+    min-width: 200px;
+    width: auto;
+    padding: 8px;
+    margin: 4px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    color: black;
+    background-color: white;
+}
+
+.log-select {
+    min-width: 200px;
+    width: auto;
+    padding: 8px;
+    margin: 4px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    color: black;
+    background-color: white;
+}
+
+.log {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+
+#log-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#selectbox {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
 .log-button {
+    min-width: 200px;
+    width: auto;
     padding: 8px 16px;
     margin: 4px 0;
     border: none;
     border-radius: 4px;
     background-color: #4CAF50;
     color: white;
+}
+}
+
+#exit-add {
+    padding: 8px 16px;
+    margin: 4px 10px;
+    border: none;
+    border-radius: 4px;
+    background-color: #f44336;
+    color: white;
+}
     cursor: pointer;
     font-size: 14px;
 }

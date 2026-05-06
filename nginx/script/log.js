@@ -63,7 +63,7 @@ async function log() {
     submit.type = "submit";
     submit.value = "Submit";
     selector.name = "workout";
-    selector.setAttribute('class', 'log-button');
+    selector.setAttribute('class', 'log-select');
     submit.setAttribute('class', 'log-button');
 
     workoutNameInput.type = "text";

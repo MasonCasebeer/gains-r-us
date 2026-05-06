@@ -1,11 +1,15 @@
 import {getLoginStatus} from './loginStatus.js';
-const display = document.getElementById("display");
-const displayArea = document.getElementById("display-area");
 const addWorkoutBtn = document.getElementById("add-workout");
 const logDiv = document.querySelector(".log");
+const display = document.getElementById("display");
+const displayArea = document.getElementById("display-area");
+const exitAddBtn = document.getElementById("exit-add");
+
+// Initially hide the display area
+displayArea.style.display = 'none';
 
 //display user table for admin page 
-async function displayUsers(name = "All") {
+async function displayUsers(name = "All", editable = false) {
 
     console.log("displayUsers called");
     var response;
@@ -15,9 +19,15 @@ async function displayUsers(name = "All") {
             headers: { "Content-Type": "application/json" },
         });
     }
-    else {
+    else if (isNaN(name)) {
         console.log(`Fetching workouts for user: ${name}`);
-        response = await fetch(`/api/user-workouts?name=${name}`, {
+        response = await fetch(`/api/user-workouts?user=${name}`, {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+        });
+    } else {
+        console.log(`Fetching workouts for userid: ${name}`);
+        response = await fetch(`/api/user-workouts?userid=${name}`, {
             method: "GET",
             headers: { "Content-Type": "application/json" },
         });
@@ -65,6 +75,7 @@ async function displayUsers(name = "All") {
             td.textContent = value;
             td.style.border = "1px solid #ddd";
             td.style.padding = "8px";
+            if (editable) td.setAttribute('contenteditable', 'true');
             row.appendChild(td);
         });
         tbody.appendChild(row);
@@ -159,11 +170,40 @@ display.addEventListener("click", async (event) => {
         }
     }
     else if(currentPage === "admin") {
-        displayUsers();
+        if (displayArea.style.display === 'none') {
+            displayArea.style.display = 'block';
+            displayUsers("All", false);
+        } else {
+            displayArea.style.display = 'none';
+        }
     }
 });
 
+addWorkoutBtn.addEventListener("click", () => {
+    const userValue = document.getElementById("user").value.trim();
+    if (userValue) {
+        displayUsers(userValue, true);
+        logDiv.style.display = "block";
+    } else {
+        alert("Please enter a userid");
+    }
+});
+
+exitAddBtn.addEventListener("click", () => {
+    logDiv.style.display = "none";
+});
+
 window.addEventListener('workoutSubmitted', (e) => {
-    displayUsersRich();
+    const currentPage = document.body.getAttribute("data-page");
+    if(currentPage === "admin") {
+        const userValue = document.getElementById("user").value.trim();
+        if (userValue) {
+            displayUsers(userValue, true);
+        } else {
+            displayUsers("All", false);
+        }
+    } else {
+        displayUsersRich();
+    }
 });
 
